@@ -1,62 +1,117 @@
-<?php include("./server/server.php"); ?>
+<?php
+ob_start();
+session_start();
+include("inc/config.php");
+include("inc/functions.php");
+include("inc/CSRF_Protect.php");
+$csrf = new CSRF_Protect();
+$error_message='';
+
+if(isset($_POST['form1'])) {
+        
+    if(empty($_POST['email']) || empty($_POST['password'])) {
+        $error_message = 'Email and/or Password can not be empty<br>';
+    } else {
+		
+		$email = strip_tags($_POST['email']);
+		$password = strip_tags($_POST['password']);
+
+    	$statement = $pdo->prepare("SELECT * FROM tbl_user WHERE email=? AND status=?");
+    	$statement->execute(array($email,'Active'));
+    	$total = $statement->rowCount();    
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);    
+        if($total==0) {
+            $error_message .= 'Email Address does not match<br>';
+        } else {       
+            foreach($result as $row) { 
+                $row_password = $row['password'];
+            }
+        
+            if( $row_password != md5($password) ) {
+                $error_message .= 'Password does not match<br>';
+            } else {       
+            
+				$_SESSION['user'] = $row;
+                header("location: index.php");
+            }
+        }
+    }
+
+    
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Login</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Login</title>
 
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <!-- Main css -->
-    <link rel="stylesheet" href="./assets/css/style.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/ionicons.min.css">
+	<link rel="stylesheet" href="css/datepicker3.css">
+	<link rel="stylesheet" href="css/all.css">
+	<link rel="stylesheet" href="css/select2.min.css">
+	<link rel="stylesheet" href="css/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="css/AdminLTE.min.css">
+	<link rel="stylesheet" href="css/_all-skins.min.css">
+
+	<link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <div class="main" style="padding-top: 90px;">
+<body class="hold-transition login-page sidebar-mini">
 
-        <!-- Sign up form -->
-      
-        <!-- Sing in  Form -->
-        <section class="sign-in">
-            <div class="container">
-                <div class="signin-content">
-                    <div class="signin-image">
-                        <figure><img src="./assets/images/signup-image.jpg" alt="sing up image"></figure>
-                        <a href="../index.php" class="signup-image-link">Back To Home</a>
-                        
-                        
-                    </div>
+<div class="login-box">
+	<div class="login-logo">
+		<b>Admin Panel</b>
+	</div>
+  	<div class="login-box-body">
+    	<p class="login-box-msg">Log in to start your session</p>
+    
+	    <?php 
+	    if( (isset($error_message)) && ($error_message!='') ):
+	        echo '<div class="error">'.$error_message.'</div>';
+	    endif;
+	    ?>
 
-                    <div class="signin-form">
-                        <h2 class="form-title">ADMIN LOGIN</h2>
-                        <form  class="register-form" id="login-form" action="login.php" method="post">
-                            <div class="alert alert-danger"><h4 id="e_msg"><?php include('./server/errors.php'); ?></h4></div>
-                            <div class="form-group">
-                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="admin_username" id="your_name" placeholder="Admin Email"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="password" id="your_pass" placeholder="Password"/>
-                            </div>
-                           
-                            <div class="form-group form-button">
-                                <input type="submit" name="login_admin" id="signin" class="form-submit" value="Log in"/>
-                            </div>
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-        </section>
+		<form action="" method="post">
+			<?php $csrf->echoInputField(); ?>
+			<div class="form-group has-feedback">
+				<input class="form-control" placeholder="Email address" name="email" type="email" autocomplete="off" autofocus>
+			</div>
+			<div class="form-group has-feedback">
+				<input class="form-control" placeholder="Password" name="password" type="password" autocomplete="off" value="">
+			</div>
+			<div class="row">
+				<div class="col-xs-8"></div>
+				<div class="col-xs-4">
+					<input type="submit" class="btn btn-primary btn-block btn-flat login-button" name="form1" value="Log In">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
-    </div>
 
-    <!-- JS -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="js/main.js"></script>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+<script src="js/jquery-2.2.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.min.js"></script>
+<script src="js/select2.full.min.js"></script>
+<script src="js/jquery.inputmask.js"></script>
+<script src="js/jquery.inputmask.date.extensions.js"></script>
+<script src="js/jquery.inputmask.extensions.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/icheck.min.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/jquery.sparkline.min.js"></script>
+<script src="js/jquery.slimscroll.min.js"></script>
+<script src="js/app.min.js"></script>
+<script src="js/demo.js"></script>
+
+</body>
 </html>

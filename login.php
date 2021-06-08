@@ -1,100 +1,99 @@
+<?php require_once('header.php'); ?>
+//fetching row banner login
 <?php
-include "db.php";
-
-session_start();
-
-#Login script is begin here
-#If user given credential matches successfully with the data available in database then we will echo string login_success
-#login_success string will go back to called Anonymous funtion $("#login").click() 
-
-if(isset($_POST["email"]) && isset($_POST["password"])){
-	$email = mysqli_real_escape_string($con,$_POST["email"]);
-	$password = $_POST["password"];
-	$sql = "SELECT * FROM user_info WHERE email = '$email' AND password = '$password'";
-	$run_query = mysqli_query($con,$sql);
-	$count = mysqli_num_rows($run_query);
-    $row = mysqli_fetch_array($run_query);
-		$_SESSION["uid"] = $row["user_id"];
-		$_SESSION["name"] = $row["first_name"];
-		$ip_add = getenv("REMOTE_ADDR");
-		//we have created a cookie in login_form.php page so if that cookie is available means user is not login
-        
-	//if user record is available in database then $count will be equal to 1
-	if($count == 1){
-		   	
-			if (isset($_COOKIE["product_list"])) {
-				$p_list = stripcslashes($_COOKIE["product_list"]);
-				//here we are decoding stored json product list cookie to normal array
-				$product_list = json_decode($p_list,true);
-				for ($i=0; $i < count($product_list); $i++) { 
-					//After getting user id from database here we are checking user cart item if there is already product is listed or not
-					$verify_cart = "SELECT id FROM cart WHERE user_id = $_SESSION[uid] AND p_id = ".$product_list[$i];
-					$result  = mysqli_query($con,$verify_cart);
-					if(mysqli_num_rows($result) < 1){
-						//if user is adding first time product into cart we will update user_id into database table with valid id
-						$update_cart = "UPDATE cart SET user_id = '$_SESSION[uid]' WHERE ip_add = '$ip_add' AND user_id = -1";
-						mysqli_query($con,$update_cart);
-					}else{
-						//if already that product is available into database table we will delete that record
-						$delete_existing_product = "DELETE FROM cart WHERE user_id = -1 AND ip_add = '$ip_add' AND p_id = ".$product_list[$i];
-						mysqli_query($con,$delete_existing_product);
-					}
-				}
-				//here we are destroying user cookie
-				setcookie("product_list","",strtotime("-1 day"),"/");
-				//if user is logging from after cart page we will send cart_login
-				echo "cart_login";
-				
-				
-				exit();
-				
-			}
-			//if user is login from page we will send login_success
-			echo "login_success";
-			$BackToMyPage = $_SERVER['HTTP_REFERER'];
-				if(!isset($BackToMyPage)) {
-					header('Location: '.$BackToMyPage);
-					echo"<script type='text/javascript'>
-					
-					</script>";
-				} else {
-					echo "<script> location.href='home.php'; </script>" ;// default page
-				} 
-				
-			
-            exit;
-
-		}else{
-                $email = mysqli_real_escape_string($con,$_POST["email"]);
-                $password =md5($_POST["password"]) ;
-                $sql = "SELECT * FROM admin_info WHERE admin_email = '$email' AND admin_password = '$password'";
-                $run_query = mysqli_query($con,$sql);
-                $count = mysqli_num_rows($run_query);
-
-            //if user record is available in database then $count will be equal to 1
-            if($count == 1){
-                $row = mysqli_fetch_array($run_query);
-                $_SESSION["uid"] = $row["admin_id"];
-                $_SESSION["name"] = $row["admin_name"];
-                $ip_add = getenv("REMOTE_ADDR");
-                //we have created a cookie in login_form.php page so if that cookie is available means user is not login
-
-
-                    //if user is login from page we will send login_success
-                    echo "login_success";
-
-                    echo "<script> location.href='admin/add_products.php'; </script>";
-                    exit;
-
-                }else{
-                    echo "<span style='color:red;'>Please register before login..!</span>";
-                    exit();
-                }
-    
-	
+$statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
+$statement->execute();
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+foreach ($result as $row) {
+    $banner_login = $row['banner_login'];
 }
-    
-	
-}
-
 ?>
+//login form
+<?php
+if(isset($_POST['form1'])) {
+        
+    if(empty($_POST['cust_email']) || empty($_POST['cust_password'])) {
+        $error_message = LANG_VALUE_132.'<br>';
+    } else {
+        
+        $cust_email = strip_tags($_POST['cust_email']);
+        $cust_password = strip_tags($_POST['cust_password']);
+
+        $statement = $pdo->prepare("SELECT * FROM tbl_customer WHERE cust_email=?");
+        $statement->execute(array($cust_email));
+        $total = $statement->rowCount();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach($result as $row) {
+            $cust_status = $row['cust_status'];
+            $row_password = $row['cust_password'];
+        }
+
+        if($total==0) {
+            $error_message .= LANG_VALUE_133.'<br>';
+        } else {
+            //using MD5 form
+            if( $row_password != md5($cust_password) ) {
+                $error_message .= LANG_VALUE_139.'<br>';
+            } else {
+                if($cust_status == 0) {
+                    $error_message .= LANG_VALUE_148.'<br>';
+                } else {
+                    $_SESSION['customer'] = $row;
+                    header("location: ".BASE_URL."dashboard.php");
+                }
+            }
+            
+        }
+    }
+}
+?>
+
+<div class="page-banner" style="background-color:#444;background-image: url(assets/uploads/<?php echo $banner_login; ?>);">
+    <div class="inner">
+        <h1><?php echo LANG_VALUE_10; ?></h1>
+    </div>
+</div>
+
+<div class="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="user-content">
+
+                    
+                    <form action="" method="post">
+                        <?php $csrf->echoInputField(); ?>                  
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <?php
+                                if($error_message != '') {
+                                    echo "<div class='error' style='padding: 10px;background:#f1f1f1;margin-bottom:20px;'>".$error_message."</div>";
+                                }
+                                if($success_message != '') {
+                                    echo "<div class='success' style='padding: 10px;background:#f1f1f1;margin-bottom:20px;'>".$success_message."</div>";
+                                }
+                                ?>
+                                <div class="form-group">
+                                    <label for=""><?php echo LANG_VALUE_94; ?> *</label>
+                                    <input type="email" class="form-control" name="cust_email">
+                                </div>
+                                <div class="form-group">
+                                    <label for=""><?php echo LANG_VALUE_96; ?> *</label>
+                                    <input type="password" class="form-control" name="cust_password">
+                                </div>
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <input type="submit" class="btn btn-primary" value="<?php echo LANG_VALUE_4; ?>" name="form1">
+                                </div>
+                                <a href="forget-password.php" style="color:#e4144d;"><?php echo LANG_VALUE_97; ?></a>
+                            </div>
+                        </div>                        
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php require_once('footer.php'); ?>

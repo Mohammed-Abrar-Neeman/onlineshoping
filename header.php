@@ -1,304 +1,411 @@
+<!-- This is main configuration File -->
 <?php
+ob_start();
 session_start();
+include("admin/inc/config.php");
+include("admin/inc/functions.php");
+include("admin/inc/CSRF_Protect.php");
+$csrf = new CSRF_Protect();
+$error_message = '';
+$success_message = '';
+$error_message1 = '';
+$success_message1 = '';
 
+// Getting all language variables into array as global variable
+$i=1;
+$statement = $pdo->prepare("SELECT * FROM tbl_language");
+$statement->execute();
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
+foreach ($result as $row) {
+	define('LANG_VALUE_'.$i,$row['lang_value']);
+	$i++;
+}
+
+$statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
+$statement->execute();
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+foreach ($result as $row)
+{
+	$logo = $row['logo'];
+	$favicon = $row['favicon'];
+	$contact_email = $row['contact_email'];
+	$contact_phone = $row['contact_phone'];
+	$meta_title_home = $row['meta_title_home'];
+    $meta_keyword_home = $row['meta_keyword_home'];
+    $meta_description_home = $row['meta_description_home'];
+    $before_head = $row['before_head'];
+    $after_body = $row['after_body'];
+}
+
+// Checking the order table and removing the pending transaction that are 24 hours+ old. Very important
+$current_date_time = date('Y-m-d H:i:s');
+$statement = $pdo->prepare("SELECT * FROM tbl_payment WHERE payment_status=?");
+$statement->execute(array('Pending'));
+$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
+foreach ($result as $row) {
+	$ts1 = strtotime($row['payment_date']);
+	$ts2 = strtotime($current_date_time);     
+	$diff = $ts2 - $ts1;
+	$time = $diff/(3600);
+	if($time>24) {
+
+		// Return back the stock amount
+		$statement1 = $pdo->prepare("SELECT * FROM tbl_order WHERE payment_id=?");
+		$statement1->execute(array($row['payment_id']));
+		$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+		foreach ($result1 as $row1) {
+			$statement2 = $pdo->prepare("SELECT * FROM tbl_product WHERE p_id=?");
+			$statement2->execute(array($row1['product_id']));
+			$result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);							
+			foreach ($result2 as $row2) {
+				$p_qty = $row2['p_qty'];
+			}
+			$final = $p_qty+$row1['quantity'];
+
+			$statement = $pdo->prepare("UPDATE tbl_product SET p_qty=? WHERE p_id=?");
+			$statement->execute(array($final,$row1['product_id']));
+		}
+		
+		// Deleting data from table
+		$statement1 = $pdo->prepare("DELETE FROM tbl_order WHERE payment_id=?");
+		$statement1->execute(array($row['payment_id']));
+
+		$statement1 = $pdo->prepare("DELETE FROM tbl_payment WHERE id=?");
+		$statement1->execute(array($row['id']));
+	}
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<head>
 
-		<title>Online Shopping</title>
+	<!-- Meta Tags -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
-		<!-- Google font -->
-		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="assets/uploads/<?php echo $favicon; ?>">
 
-		<!-- Bootstrap -->
-		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="assets/css/jquery.bxslider.min.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/rating.css">
+	<link rel="stylesheet" href="assets/css/spacing.css">
+	<link rel="stylesheet" href="assets/css/bootstrap-touch-slider.css">
+	<link rel="stylesheet" href="assets/css/animate.min.css">
+	<link rel="stylesheet" href="assets/css/tree-menu.css">
+	<link rel="stylesheet" href="assets/css/select2.min.css">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/responsive.css">
 
-		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="css/slick.css"/>
-		<link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+	<?php
 
-		<!-- nouislider -->
-		<link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+	$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
+	foreach ($result as $row) {
+		$about_meta_title = $row['about_meta_title'];
+		$about_meta_keyword = $row['about_meta_keyword'];
+		$about_meta_description = $row['about_meta_description'];
+		$faq_meta_title = $row['faq_meta_title'];
+		$faq_meta_keyword = $row['faq_meta_keyword'];
+		$faq_meta_description = $row['faq_meta_description'];
+		$blog_meta_title = $row['blog_meta_title'];
+		$blog_meta_keyword = $row['blog_meta_keyword'];
+		$blog_meta_description = $row['blog_meta_description'];
+		$contact_meta_title = $row['contact_meta_title'];
+		$contact_meta_keyword = $row['contact_meta_keyword'];
+		$contact_meta_description = $row['contact_meta_description'];
+		$pgallery_meta_title = $row['pgallery_meta_title'];
+		$pgallery_meta_keyword = $row['pgallery_meta_keyword'];
+		$pgallery_meta_description = $row['pgallery_meta_description'];
+		$vgallery_meta_title = $row['vgallery_meta_title'];
+		$vgallery_meta_keyword = $row['vgallery_meta_keyword'];
+		$vgallery_meta_description = $row['vgallery_meta_description'];
+	}
 
-		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+	$cur_page = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
+	
+	if($cur_page == 'index.php' || $cur_page == 'login.php' || $cur_page == 'registration.php' || $cur_page == 'cart.php' || $cur_page == 'checkout.php' || $cur_page == 'forget-password.php' || $cur_page == 'reset-password.php' || $cur_page == 'product-category.php' || $cur_page == 'product.php') {
+		?>
+		<title><?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
 
-		<!-- Custom stlylesheet -->
-		<link type="text/css" rel="stylesheet" href="css/style.css"/>
-		<link type="text/css" rel="stylesheet" href="css/accountbtn.css"/>
-		
-		
-		
-         
-		
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-    <style>
-        #navigation {
-          background: #FF4E50;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #F9D423, #FF4E50);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #F9D423, #FF4E50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	if($cur_page == 'about.php') {
+		?>
+		<title><?php echo $about_meta_title; ?></title>
+		<meta name="keywords" content="<?php echo $about_meta_keyword; ?>">
+		<meta name="description" content="<?php echo $about_meta_description; ?>">
+		<?php
+	}
+	if($cur_page == 'faq.php') {
+		?>
+		<title><?php echo $faq_meta_title; ?></title>
+		<meta name="keywords" content="<?php echo $faq_meta_keyword; ?>">
+		<meta name="description" content="<?php echo $faq_meta_description; ?>">
+		<?php
+	}
+	if($cur_page == 'contact.php') {
+		?>
+		<title><?php echo $contact_meta_title; ?></title>
+		<meta name="keywords" content="<?php echo $contact_meta_keyword; ?>">
+		<meta name="description" content="<?php echo $contact_meta_description; ?>">
+		<?php
+	}
+	if($cur_page == 'product.php')
+	{
+		$statement = $pdo->prepare("SELECT * FROM tbl_product WHERE p_id=?");
+		$statement->execute(array($_REQUEST['id']));
+		$result = $statement->fetchAll(PDO::FETCH_ASSOC);							
+		foreach ($result as $row) 
+		{
+		    $og_photo = $row['p_featured_photo'];
+		    $og_title = $row['p_name'];
+		    $og_slug = 'product.php?id='.$_REQUEST['id'];
+			$og_description = substr(strip_tags($row['p_description']),0,200).'...';
+		}
+	}
 
-          
-        }
-        #header {
-  
-            background: #780206;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #061161, #780206);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #061161, #780206); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	if($cur_page == 'dashboard.php') {
+		?>
+		<title>Dashboard - <?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
+	if($cur_page == 'customer-profile-update.php') {
+		?>
+		<title>Update Profile - <?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
+	if($cur_page == 'customer-billing-shipping-update.php') {
+		?>
+		<title>Update Billing and Shipping Info - <?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
+	if($cur_page == 'customer-password-update.php') {
+		?>
+		<title>Update Password - <?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
+	if($cur_page == 'customer-order.php') {
+		?>
+		<title>Orders - <?php echo $meta_title_home; ?></title>
+		<meta name="keywords" content="<?php echo $meta_keyword_home; ?>">
+		<meta name="description" content="<?php echo $meta_description_home; ?>">
+		<?php
+	}
+	?>
+	
+	<?php if($cur_page == 'blog-single.php'): ?>
+		<meta property="og:title" content="<?php echo $og_title; ?>">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="<?php echo BASE_URL.$og_slug; ?>">
+		<meta property="og:description" content="<?php echo $og_description; ?>">
+		<meta property="og:image" content="assets/uploads/<?php echo $og_photo; ?>">
+	<?php endif; ?>
 
-  
-        }
-        #top-header {
-              
-  
-            background: #870000;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #190A05, #870000);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #190A05, #870000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	<?php if($cur_page == 'product.php'): ?>
+		<meta property="og:title" content="<?php echo $og_title; ?>">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="<?php echo BASE_URL.$og_slug; ?>">
+		<meta property="og:description" content="<?php echo $og_description; ?>">
+		<meta property="og:image" content="assets/uploads/<?php echo $og_photo; ?>">
+	<?php endif; ?>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 
-        }
-        #footer {
-            background: #7474BF;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	<script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5993ef01e2587a001253a261&product=inline-share-buttons"></script>
 
+<?php echo $before_head; ?>
 
-          color: #1E1F29;
-        }
-        #bottom-footer {
-            background: #7474BF;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-          
+</head>
+<body>
 
-        }
-        .footer-links li a {
-          color: #1E1F29;
-        }
-        .mainn-raised {
-            
-            margin: -7px 0px 0px;
-            border-radius: 6px;
-            box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+<?php echo $after_body; ?>
+<!--
+<div id="preloader">
+	<div id="status"></div>
+</div>-->
 
-        }
-       
-        .glyphicon{
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    }
-    .glyphicon-chevron-left:before{
-        content:"\f053"
-    }
-    .glyphicon-chevron-right:before{
-        content:"\f054"
-    }
-        
-
-       
-        
-        </style>
-
-    </head>
-	<body>
-		<!-- HEADER -->
-		<header>
-			<!-- TOP HEADER -->
-			<div id="top-header">
-				<div class="container">
-					
-					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-inr"></i> INR</a></li>
-						<li><?php
-                             include "db.php";
-                            if(isset($_SESSION["uid"])){
-                                $sql = "SELECT first_name FROM user_info WHERE user_id='$_SESSION[uid]'";
-                                $query = mysqli_query($con,$sql);
-                                $row=mysqli_fetch_array($query);
-                                
-                                echo '
-                               <div class="dropdownn">
-                                  <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> HI '.$row["first_name"].'</a>
-                                  <div class="dropdownn-content">
-                                    <a href="" data-toggle="modal" data-target="#profile"><i class="fa fa-user-circle" aria-hidden="true" ></i>My Profile</a>
-                                    <a href="logout.php"  ><i class="fa fa-sign-in" aria-hidden="true"></i>Log out</a>
-                                    
-                                  </div>
-                                </div>';
-
-                            }else{ 
-                                echo '
-                                <div class="dropdownn">
-                                  <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> My Account</a>
-								  <div class="dropdownn-content">
-								  	<a href="admin/login.php" ><i class="fa fa-user" aria-hidden="true" ></i>Admin</a>
-                                    <a href="" data-toggle="modal" data-target="#Modal_login"><i class="fa fa-sign-in" aria-hidden="true" ></i>Login</a>
-                                    <a href="" data-toggle="modal" data-target="#Modal_register"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
-                                    
-                                  </div>
-                                </div>';
-                                
-                            }
-                                             ?>
-                               
-                                </li>				
+<!-- top bar -->
+<div class="top">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="left">
+					<ul>
+						<li><i class="fa fa-phone"></i> <?php echo $contact_phone; ?></li>
+						<li><i class="fa fa-envelope-o"></i> <?php echo $contact_email; ?></li>
 					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				<div class="right">
+					<ul>
+						<?php
+						$statement = $pdo->prepare("SELECT * FROM tbl_social");
+						$statement->execute();
+						$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+						foreach ($result as $row) {
+							?>
+							<?php if($row['social_url'] != ''): ?>
+							<li><a href="<?php echo $row['social_url']; ?>"><i class="<?php echo $row['social_icon']; ?>"></i></a></li>
+							<?php endif; ?>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="header">
+	<div class="container">
+		<div class="row inner">
+			<div class="col-md-4 logo">
+				<a href="index.php"><img src="assets/uploads/<?php echo $logo; ?>" alt="logo image"></a>
+			</div>
+			
+			<div class="col-md-5 right">
+				<ul>
 					
-				</div>
+					<?php
+					if(isset($_SESSION['customer'])) {
+						?>
+						<li><i class="fa fa-user"></i> <?php echo LANG_VALUE_13; ?> <?php echo $_SESSION['customer']['cust_name']; ?></li>
+						<li><a href="dashboard.php"><i class="fa fa-home"></i> <?php echo LANG_VALUE_89; ?></a></li>
+						<?php
+					} else {
+						?>
+						<li><a href="login.php"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
+						<li><a href="registration.php"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
+						<?php	
+					}
+					?>
+
+					<li><a href="cart.php"><i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_19; ?> (<?php echo LANG_VALUE_1; ?><?php
+					if(isset($_SESSION['cart_p_id'])) {
+						$table_total_price = 0;
+						$i=0;
+	                    foreach($_SESSION['cart_p_qty'] as $key => $value) 
+	                    {
+	                        $i++;
+	                        $arr_cart_p_qty[$i] = $value;
+	                    }                    $i=0;
+	                    foreach($_SESSION['cart_p_current_price'] as $key => $value) 
+	                    {
+	                        $i++;
+	                        $arr_cart_p_current_price[$i] = $value;
+	                    }
+	                    for($i=1;$i<=count($arr_cart_p_qty);$i++) {
+	                    	$row_total_price = $arr_cart_p_current_price[$i]*$arr_cart_p_qty[$i];
+	                        $table_total_price = $table_total_price + $row_total_price;
+	                    }
+						echo $table_total_price;
+					} else {
+						echo '0.00';
+					}
+					?>)</a></li>
+				</ul>
 			</div>
-			<!-- /TOP HEADER -->
-			
-			
-
-			<!-- MAIN HEADER -->
-			<div id="header">
-				<!-- container -->
-				<div class="container">
-					<!-- row -->
-					<div class="row">
-						<!-- LOGO -->
-						<div class="col-md-3">
-							<div class="header-logo">
-								<a href="#" class="logo">
-								<font style="font-style:normal; font-size: 33px;color: aliceblue;font-family: serif">
-                                        Online Shop
-                                    </font>
-									
-								</a>
-							</div>
-						</div>
-						<!-- /LOGO -->
-
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
-									<select class="input-select">
-										<option value="0">All Categories</option>
-										<option value="1">Men</option>
-										<option value="1">Women </option>
-									</select>
-									<input class="input" id="search" type="text" placeholder="Search here">
-									<button type="submit" id="search_btn" class="search-btn">Search</button>
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
-
-						<!-- ACCOUNT -->
-						<div class="col-md-3 clearfix">
-							<div class="header-ctn">
-								
-
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Your Cart</span>
-										<div class="badge qty">0</div>
-									</a>
-									<div class="cart-dropdown"  >
-										<div class="cart-list" id="cart_product">
-										
-											
-										</div>
-										
-										<div class="cart-btns">
-												<a href="cart.php" style="width:100%;"><i class="fa fa-edit"></i>  edit cart</a>
-											
-										</div>
-									</div>
-										
-									</div>
-								<!-- /Cart -->
-
-								<!-- Menu Toogle -->
-								<div class="menu-toggle">
-									<a href="#">
-										<i class="fa fa-bars"></i>
-										<span>Menu</span>
-									</a>
-								</div>
-								<!-- /Menu Toogle -->
-							</div>
-						</div>
-						<!-- /ACCOUNT -->
+			<div class="col-md-3 search-area">
+				<form class="navbar-form navbar-left" role="search" action="search-result.php" method="get">
+					<?php $csrf->echoInputField(); ?>
+					<div class="form-group">
+						<input type="text" class="form-control search-top" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
 					</div>
-					<!-- row -->
-				</div>
-				<!-- container -->
+					<button type="submit" class="btn btn-default"><?php echo LANG_VALUE_3; ?></button>
+				</form>
 			</div>
-			<!-- /MAIN HEADER -->
-		</header>
-		<!-- /HEADER -->
-		<nav id='navigation'>
-			<!-- container -->
-            <div class="container" id="get_category_home">
-                
-            </div>
-				<!-- responsive-nav -->
-				
-			<!-- /container -->
-		</nav>
-            
+		</div>
+	</div>
+</div>
 
-		<!-- NAVIGATION -->
-		
-		<div class="modal fade" id="Modal_login" role="dialog">
-                        <div class="modal-dialog">
-													
-                          <!-- Modal content-->
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              
-                            </div>
-                            <div class="modal-body">
-                            <?php
-                                include "login_form.php";
-    
-                            ?>
-          
-                            </div>
-                            
-                          </div>
-													
-                        </div>
-                      </div>
-                <div class="modal fade" id="Modal_register" role="dialog">
-                        <div class="modal-dialog" style="">
+<div class="nav">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 pl_0 pr_0">
+				<div class="menu-container">
+					<div class="menu">
+						<ul>
+							<li><a href="index.php">Home</a></li>
+							
+							<?php
+							$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+							foreach ($result as $row) {
+								?>
+								<li><a href="product-category.php?id=<?php echo $row['tcat_id']; ?>&type=top-category"><?php echo $row['tcat_name']; ?></a>
+									<ul>
+										<?php
+										$statement1 = $pdo->prepare("SELECT * FROM tbl_mid_category WHERE tcat_id=?");
+										$statement1->execute(array($row['tcat_id']));
+										$result1 = $statement1->fetchAll(PDO::FETCH_ASSOC);
+										foreach ($result1 as $row1) {
+											?>
+											<li><a href="product-category.php?id=<?php echo $row1['mcat_id']; ?>&type=mid-category"><?php echo $row1['mcat_name']; ?></a>
+												<ul>
+													<?php
+													$statement2 = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
+													$statement2->execute(array($row1['mcat_id']));
+													$result2 = $statement2->fetchAll(PDO::FETCH_ASSOC);
+													foreach ($result2 as $row2) {
+														?>
+														<li><a href="product-category.php?id=<?php echo $row2['ecat_id']; ?>&type=end-category"><?php echo $row2['ecat_name']; ?></a></li>
+														<?php
+													}
+													?>
+												</ul>
+											</li>
+											<?php
+										}
+										?>
+									</ul>
+								</li>
+								<?php
+							}
+							?>
 
-                          <!-- Modal content-->
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              
-                            </div>
-                            <div class="modal-body">
-                            <?php
-                                include "register_form.php";
-    
-                            ?>
-          
-                            </div>
-                            
-                          </div>
+							<?php
+							$statement = $pdo->prepare("SELECT * FROM tbl_page WHERE id=1");
+							$statement->execute();
+							$result = $statement->fetchAll(PDO::FETCH_ASSOC);		
+							foreach ($result as $row) {
+								$about_title = $row['about_title'];
+								$faq_title = $row['faq_title'];
+								$blog_title = $row['blog_title'];
+								$contact_title = $row['contact_title'];
+								$pgallery_title = $row['pgallery_title'];
+								$vgallery_title = $row['vgallery_title'];
+							}
+							?>
 
-                        </div>
-                      </div>
-		
+							<li><a href="about.php"><?php echo $about_title; ?></a></li>
+							<li><a href="faq.php"><?php echo $faq_title; ?></a></li>
+
+							<li><a href="contact.php"><?php echo $contact_title; ?></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

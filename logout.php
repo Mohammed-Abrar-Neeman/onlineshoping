@@ -1,17 +1,7 @@
-<?php
-
+<?php 
+ob_start();
 session_start();
-
-unset($_SESSION["uid"]);
-
-unset($_SESSION["name"]);
-
-$BackToMyPage = $_SERVER['HTTP_REFERER'];
-if(isset($BackToMyPage)) {
-    header('Location: '.$BackToMyPage);
-} else {
-    header('Location: index.php'); // default page
-}
-   
-
+include 'admin/inc/config.php';
+unset($_SESSION['customer']);
+header("location: ".BASE_URL.'login.php'); 
 ?>
