@@ -59,7 +59,7 @@ Transaction Details: <br>'.$row['bank_transaction_info'];
             $order_detail .= '
 Customer Name: '.$row['customer_name'].'<br>
 Customer Email: '.$row['customer_email'].'<br>
-Payment Method: '.$row['payment_method'].'<br>
+Payment Method: "'.$row['payment_method'].'"<br>
 Payment Date: '.$row['payment_date'].'<br>
 Payment Details: <br>'.$payment_details.'<br>
 Paid Amount: '.$row['paid_amount'].'<br>
@@ -237,7 +237,7 @@ if($success_message != '') {
                         		<b>Expire Month:</b> <?php echo $row['card_month']; ?><br>
                         		<b>Expire Year:</b> <?php echo $row['card_year']; ?><br>
                         	<?php elseif($row['payment_method'] == 'Bank Deposit'): ?>
-                        		<b>Payment Method:</b> <?php echo '<span style="color:red;"><b>'.$row['payment_method'].'</b></span>'; ?><br>
+                        		<b>Payment Method:</b> <?php echo '<span style="color:red;"><b>"BTC/Monero"</b></span>'; ?><br>
                         		<b>Payment Id:</b> <?php echo $row['payment_id']; ?><br>
 								<b>Date:</b> <?php echo $row['payment_date']; ?><br>
                         		<b>Transaction Information:</b> <br><?php echo $row['bank_transaction_info']; ?><br>

@@ -241,42 +241,9 @@ foreach ($result as $row) {
 	<div id="status"></div>
 </div>-->
 
-<!-- top bar -->
-<div class="top">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-sm-6 col-xs-12">
-				<div class="left">
-					<ul>
-						<li><i class="fa fa-phone"></i> <?php echo $contact_phone; ?></li>
-						<li><i class="fa fa-envelope-o"></i> <?php echo $contact_email; ?></li>
-					</ul>
-				</div>
-			</div>
-			<div class="col-md-6 col-sm-6 col-xs-12">
-				<div class="right">
-					<ul>
-						<?php
-						$statement = $pdo->prepare("SELECT * FROM tbl_social");
-						$statement->execute();
-						$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-						foreach ($result as $row) {
-							?>
-							<?php if($row['social_url'] != ''): ?>
-							<li><a href="<?php echo $row['social_url']; ?>"><i class="<?php echo $row['social_icon']; ?>"></i></a></li>
-							<?php endif; ?>
-							<?php
-						}
-						?>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 
-<div class="header">
+<div class="header"  style="background-color:Black;">
 	<div class="container">
 		<div class="row inner">
 			<div class="col-md-4 logo">
@@ -284,23 +251,23 @@ foreach ($result as $row) {
 			</div>
 			
 			<div class="col-md-5 right">
-				<ul>
+				<ul >
 					
 					<?php
 					if(isset($_SESSION['customer'])) {
 						?>
-						<li><i class="fa fa-user"></i> <?php echo LANG_VALUE_13; ?> <?php echo $_SESSION['customer']['cust_name']; ?></li>
-						<li><a href="dashboard.php"><i class="fa fa-home"></i> <?php echo LANG_VALUE_89; ?></a></li>
+						<li style="color:white"><i class="fa fa-user" ></i> <?php echo LANG_VALUE_13; ?> <?php echo $_SESSION['customer']['cust_name']; ?></li>
+						<li ><a href="dashboard.php" style="color:white"><i class="fa fa-home"></i> <?php echo LANG_VALUE_89; ?></a></li>
 						<?php
 					} else {
 						?>
-						<li><a href="login.php"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
-						<li><a href="registration.php"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
+						<li style="color:white"><a href="login.php"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
+						<li ><a href="registration.php" style="color:white"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
 						<?php	
 					}
 					?>
 
-					<li><a href="cart.php"><i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_19; ?> (<?php echo LANG_VALUE_1; ?><?php
+					<li><a href="cart.php" style="color:white"><i class="fa fa-shopping-cart"></i> <?php echo LANG_VALUE_19; ?> (<?php echo LANG_VALUE_1; ?><?php
 					if(isset($_SESSION['cart_p_id'])) {
 						$table_total_price = 0;
 						$i=0;
@@ -331,19 +298,19 @@ foreach ($result as $row) {
 					<div class="form-group">
 						<input type="text" class="form-control search-top" placeholder="<?php echo LANG_VALUE_2; ?>" name="search_text">
 					</div>
-					<button type="submit" class="btn btn-default"><?php echo LANG_VALUE_3; ?></button>
+					<button type="submit" class="btn btn-default" ><?php echo LANG_VALUE_3; ?></button>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="nav">
-	<div class="container">
+<div class="nav" style="background-color:#006B38FF;" >
+	<div class="container" >
 		<div class="row">
 			<div class="col-md-12 pl_0 pr_0">
 				<div class="menu-container">
-					<div class="menu">
+					<div class="menu" style="background-color:#006B38FF;" >
 						<ul>
 							<li><a href="index.php">Home</a></li>
 							

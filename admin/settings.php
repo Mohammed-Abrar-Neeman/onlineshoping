@@ -1637,26 +1637,26 @@ foreach ($result as $row) {
                             <form class="form-horizontal" action="" method="post">
                                 <div class="box box-info">
                                     <div class="box-body">
-                                        <div class="form-group">
+                                        <!--<div class="form-group">
                                             <label for="" class="col-sm-2 control-label">PayPal - Business Email </label>
                                             <div class="col-sm-5">
                                                 <input type="text" name="paypal_email" class="form-control" value="<?php echo $paypal_email; ?>">
                                             </div>
-                                        </div>
-                                      <!-- <div class="form-group">
+                                        </div>-->
+                                      <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Stripe - Public Key </label>
                                             <div class="col-sm-5">
-                                                <input type="text" name="stripe_public_key" class="form-control" value="<?php echo $stripe_public_key; ?>">
+                                                <input type="text" name="stripe_public_key" class="form-control" value="">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">Stripe - Secret Key </label>
                                             <div class="col-sm-5">
-                                                <input type="text" name="stripe_secret_key" class="form-control" value="<?php echo $stripe_secret_key; ?>">
+                                                <input type="text" name="stripe_secret_key" class="form-control" value="">
                                             </div>
-                                        </div> -->
+                                        </div>
                                         <div class="form-group">
-                                            <label for="" class="col-sm-2 control-label">Bank Information </label>
+                                            <label for="" class="col-sm-2 control-label">BTC/Monero address </label>
                                             <div class="col-sm-5">
                                                 <textarea name="bank_detail" class="form-control" cols="30" rows="10"><?php echo $bank_detail; ?></textarea>
                                             </div>
