@@ -261,7 +261,7 @@ foreach ($result as $row) {
 						<?php
 					} else {
 						?>
-						<li style="color:white"><a href="login.php"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
+						<li ><a href="login.php" style="color:white"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
 						<li ><a href="registration.php" style="color:white"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
 						<?php	
 					}
@@ -312,7 +312,7 @@ foreach ($result as $row) {
 				<div class="menu-container">
 					<div class="menu" style="background-color:#006B38FF;" >
 						<ul>
-							<li><a href="index.php">Home</a></li>
+							<li><a href="home.php">Home</a></li>
 							
 							<?php
 							$statement = $pdo->prepare("SELECT * FROM tbl_top_category WHERE show_on_menu=1");
