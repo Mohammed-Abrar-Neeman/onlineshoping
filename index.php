@@ -15,7 +15,7 @@ if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
 	//include('inc/header.php');
 }
 ?>
-<title>Shop Indiana</title> 
+<title>VAGATOR STORE</title> 
 <script src="js/load_captcha.js"></script>
 <style> {
     font-family: 'Raleway', sans-serif;
