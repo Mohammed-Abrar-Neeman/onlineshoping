@@ -33,7 +33,7 @@ if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
 .login-text {
     width: 800px;
     height:450px;
-    background: linear-gradient(to left, #ab68ca, #de67a3); 
+    background: linear-gradient(to left, #000000, #000000); 
     position: absolute;
     top: -300px;
     box-sizing: border-box;
