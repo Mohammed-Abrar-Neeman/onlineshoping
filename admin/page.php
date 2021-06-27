@@ -37,11 +37,11 @@ if(isset($_POST['form_about'])) {
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);                           
             foreach ($result as $row) {
                 $about_banner = $row['about_banner'];
-                unlink('../assets/uploads/'.$about_banner);
+                @unlink('../assets/uploads/'.$about_banner);
             }
 
             // updating the data
-            $final_name = 'about-banner'.'.'.$ext;
+            $final_name = 'about_banner'.'.'.$ext;
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
             // updating the database
@@ -95,7 +95,7 @@ if(isset($_POST['form_faq'])) {
             }
 
             // updating the data
-            $final_name = 'faq-banner'.'.'.$ext;
+            $final_name = 'faq_banner'.'.'.$ext;
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
             // updating the database
@@ -149,7 +149,7 @@ if(isset($_POST['form_contact'])) {
             }
 
             // updating the data
-            $final_name = 'contact-banner'.'.'.$ext;
+            $final_name = 'contact_banner'.'.'.$ext;
             move_uploaded_file( $path_tmp, '../assets/uploads/'.$final_name );
 
             // updating the database
