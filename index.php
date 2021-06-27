@@ -7,7 +7,7 @@ if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
 	}else{
 		$message = "Your have entered correct security code."; 
 		echo '<script type="text/javascript">
-				location.replace("home.php");
+				location.replace("login.php");
 			  </script>';
 	}
 } else {
