@@ -152,7 +152,7 @@ if (isset($_POST['form1'])) {
                                     ));
 
         // Send email for confirmation of the account
-        $to = $_POST['cust_email'];
+       /* $to = $_POST['cust_email'];
         
         $subject = LANG_VALUE_150;
         $verify_link = BASE_URL.'verify.php?email='.$to.'&token='.$token;
@@ -177,7 +177,7 @@ if (isset($_POST['form1'])) {
         unset($_POST['cust_address']);
         unset($_POST['cust_city']);
         unset($_POST['cust_state']);
-        unset($_POST['cust_zip']);
+        unset($_POST['cust_zip']);*/
 
         $success_message = LANG_VALUE_152;
     }
