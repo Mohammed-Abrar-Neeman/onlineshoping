@@ -37,7 +37,7 @@ if(isset($_POST['form1'])) {
                     $error_message .= LANG_VALUE_148.'<br>';
                 } else {
                     $_SESSION['customer'] = $row;
-                    header("location: ".BASE_URL."dashboard.php");
+                    header("location: "."dashboard.php");
                 }
             }
             
