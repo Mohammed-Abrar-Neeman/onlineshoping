@@ -254,17 +254,12 @@ foreach ($result as $row) {
 				<ul >
 					
 					<?php
-					if(isset($_SESSION['customer'])) {
-						?>
-						<li style="color:white"><i class="fa fa-user" ></i> <?php echo LANG_VALUE_13; ?> <?php echo $_SESSION['customer']['cust_name']; ?></li>
-						<li ><a href="dashboard.php" style="color:white"><i class="fa fa-home"></i> <?php echo LANG_VALUE_89; ?></a></li>
-						<?php
-					} else {
+					
 						?>
 						<li ><a href="login.php" style="color:white"><i class="fa fa-sign-in"></i> <?php echo LANG_VALUE_9; ?></a></li>
 						<li ><a href="registration.php" style="color:white"><i class="fa fa-user-plus"></i> <?php echo LANG_VALUE_15; ?></a></li>
 						<?php	
-					}
+					
 					?>
 
 					
