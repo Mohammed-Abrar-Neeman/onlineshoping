@@ -18,7 +18,7 @@ if(!isset($_REQUEST['id'])) {
 ?>
 
 <?php
-$ecat_ids = [] ;
+$p_ids = [] ;
 	// Getting all ecat ids
 	$statement = $pdo->prepare("SELECT * FROM tbl_end_category WHERE mcat_id=?");
 	$statement->execute(array($_REQUEST['id']));
