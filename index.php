@@ -181,7 +181,7 @@ if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
     <button class="cta"><i class="fas fa-chevron-down fa-1x"></i></button>
   </div>
   <div class="call-text">
-    <h1>Enter the captcha <span>to visit</span>Vagator Store</h1>
+    <h1>Enter the captcha <span>to visit</span> Vagator Store</h1>
 	<div class="container">
 	<div class="row">			
 		<div class="col-md-6">
