@@ -736,8 +736,8 @@ if(isset($_POST['form7_10'])) {
 
 if(isset($_POST['form9'])) {
     // updating the database
-    $statement = $pdo->prepare("UPDATE tbl_settings SET paypal_email=?, bank_detail=? WHERE id=1");
-    $statement->execute(array($_POST['paypal_email'],$_POST['bank_detail']));
+    $statement = $pdo->prepare("UPDATE tbl_settings SET bank_detail=? WHERE id=1");
+    $statement->execute(array($_POST['$_POST['bank_detail']));
 
     $success_message = 'Payment Settings is updated successfully.';
 }
