@@ -14,10 +14,10 @@ if (isset($_POST['form1'])) {
 
     $valid = 1;
 
-    if(empty($_POST['cust_name'])) {
+    /*if(empty($_POST['cust_name'])) {
         $valid = 0;
         $error_message .= LANG_VALUE_123."<br>";
-    }
+    }*/
 
     if(empty($_POST['cust_email'])) {
         $valid = 0;
@@ -37,7 +37,7 @@ if (isset($_POST['form1'])) {
         }
     }
 
-    if(empty($_POST['cust_phone'])) {
+    /*if(empty($_POST['cust_phone'])) {
         $valid = 0;
         $error_message .= LANG_VALUE_124."<br>";
     }
@@ -65,7 +65,7 @@ if (isset($_POST['form1'])) {
     if(empty($_POST['cust_zip'])) {
         $valid = 0;
         $error_message .= LANG_VALUE_129."<br>";
-    }
+    }*/
 
     if( empty($_POST['cust_password']) || empty($_POST['cust_re_password']) ) {
         $valid = 0;
@@ -119,15 +119,15 @@ if (isset($_POST['form1'])) {
                                         cust_status
                                     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $statement->execute(array(
-                                        strip_tags($_POST['cust_name']),
-                                        strip_tags($_POST['cust_cname']),
+                                        '',
+                                        '',
                                         strip_tags($_POST['cust_email']),
-                                        strip_tags($_POST['cust_phone']),
-                                        strip_tags($_POST['cust_country']),
-                                        strip_tags($_POST['cust_address']),
-                                        strip_tags($_POST['cust_city']),
-                                        strip_tags($_POST['cust_state']),
-                                        strip_tags($_POST['cust_zip']),
+                                        '',
+                                        0,
+                                        '',
+                                        '',
+                                        '',
+                                        '',
                                         '',
                                         '',
                                         '',
@@ -152,7 +152,7 @@ if (isset($_POST['form1'])) {
                                     ));
 
         // Send email for confirmation of the account
-        $to = $_POST['cust_email'];
+        /*$to = $_POST['cust_email'];
         
         $subject = LANG_VALUE_150;
         $verify_link = BASE_URL.'verify.php?email='.$to.'&token='.$token;
@@ -177,7 +177,7 @@ if (isset($_POST['form1'])) {
         unset($_POST['cust_address']);
         unset($_POST['cust_city']);
         unset($_POST['cust_state']);
-        unset($_POST['cust_zip']);
+        unset($_POST['cust_zip']);*/
 
         $success_message = LANG_VALUE_152;
     }
@@ -213,19 +213,19 @@ if (isset($_POST['form1'])) {
                                 }
                                 ?>
 
-                                <div class="col-md-6 form-group">
+                                <!--<div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_102; ?> *</label>
                                     <input type="text" class="form-control" name="cust_name" value="<?php if(isset($_POST['cust_name'])){echo $_POST['cust_name'];} ?>">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_103; ?></label>
                                     <input type="text" class="form-control" name="cust_cname" value="<?php if(isset($_POST['cust_cname'])){echo $_POST['cust_cname'];} ?>">
-                                </div>
+                                </div>-->
                                 <div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_94; ?> *</label>
                                     <input type="email" class="form-control" name="cust_email" value="<?php if(isset($_POST['cust_email'])){echo $_POST['cust_email'];} ?>">
                                 </div>
-                                <div class="col-md-6 form-group">
+                                <!--<div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_104; ?> *</label>
                                     <input type="text" class="form-control" name="cust_phone" value="<?php if(isset($_POST['cust_phone'])){echo $_POST['cust_phone'];} ?>">
                                 </div>
@@ -261,7 +261,7 @@ if (isset($_POST['form1'])) {
                                 <div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_109; ?> *</label>
                                     <input type="text" class="form-control" name="cust_zip" value="<?php if(isset($_POST['cust_zip'])){echo $_POST['cust_zip'];} ?>">
-                                </div>
+                                </div>-->
                                 <div class="col-md-6 form-group">
                                     <label for=""><?php echo LANG_VALUE_96; ?> *</label>
                                     <input type="password" class="form-control" name="cust_password">
@@ -270,9 +270,9 @@ if (isset($_POST['form1'])) {
                                     <label for=""><?php echo LANG_VALUE_98; ?> *</label>
                                     <input type="password" class="form-control" name="cust_re_password">
                                 </div>
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-18 form-group">
                                     <label for=""></label>
-                                    <input type="submit" class="btn btn-primary" value="<?php echo LANG_VALUE_15; ?>" name="form1">
+                                    <input style="width:100%;height:100%;border: 1px solid" type="submit" class="btn btn-primary col-md-10" value="<?php echo LANG_VALUE_15; ?>" name="form1">
                                 </div>
                             </div>
                         </div>                        
