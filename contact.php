@@ -52,7 +52,7 @@ if(isset($_POST['form_contact']))
 
     $valid = 1;
 
-    if(empty($_POST['visitor_name']))
+    /*if(empty($_POST['visitor_name']))
     {
         $valid = 0;
         $error_message .= 'Please enter your name.\n';
@@ -62,7 +62,7 @@ if(isset($_POST['form_contact']))
     {
         $valid = 0;
         $error_message .= 'Please enter your phone number.\n';
-    }
+    }*/
 
 
     if(empty($_POST['visitor_email']))
@@ -89,9 +89,9 @@ if(isset($_POST['form_contact']))
     if($valid == 1)
     {
         
-        $visitor_name = strip_tags($_POST['visitor_name']);
+        //$visitor_name = strip_tags($_POST['visitor_name']);
         $visitor_email = strip_tags($_POST['visitor_email']);
-        $visitor_phone = strip_tags($_POST['visitor_phone']);
+        //$visitor_phone = strip_tags($_POST['visitor_phone']);
         $visitor_message = strip_tags($_POST['visitor_message']);
 
         // sending email
@@ -101,16 +101,8 @@ if(isset($_POST['form_contact']))
 <html><body>
 <table>
 <tr>
-<td>Name</td>
-<td>'.$visitor_name.'</td>
-</tr>
-<tr>
 <td>Email</td>
 <td>'.$visitor_email.'</td>
-</tr>
-<tr>
-<td>Phone</td>
-<td>'.$visitor_phone.'</td>
 </tr>
 <tr>
 <td>Comment</td>
@@ -148,18 +140,18 @@ if(isset($_POST['form_contact']))
                             <?php $csrf->echoInputField(); ?>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <!--<div class="form-group">
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control" name="visitor_name" placeholder="Enter name">
-                                    </div>
+                                    </div>-->
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
                                         <input type="email" class="form-control" name="visitor_email" placeholder="Enter email address">
                                     </div>
-                                    <div class="form-group">
+                                    <!--<div class="form-group">
                                         <label for="email">Phone Number</label>
                                         <input type="text" class="form-control" name="visitor_phone" placeholder="Enter phone number">
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -174,7 +166,7 @@ if(isset($_POST['form_contact']))
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <!--<div class="col-md-4">
                         <legend><span class="glyphicon glyphicon-globe"></span> Our office</legend>
                         <address>
                             <?php echo nl2br($contact_address); ?>
@@ -187,11 +179,11 @@ if(isset($_POST['form_contact']))
                             <strong>Email:</strong><br>
                             <a href="mailto:<?php echo $contact_email; ?>"><span><?php echo $contact_email; ?></span></a>
                         </address>
-                    </div>
+                    </div>-->
                 </div>
 
-                <h3>Find Us On Map</h3>
-                <?php echo $contact_map_iframe; ?>
+                <!--<h3>Find Us On Map</h3>
+                <?php echo $contact_map_iframe; ?>-->
                 
             </div>
         </div>
