@@ -15,9 +15,9 @@
 						<thead>
 							<tr>
 								<th width="30">SL</th>
-								<th width="180">Name</th>
+								<!--<th width="180">Name</th>-->
 								<th width="180">Email Address</th>
-								<th width="180">Country, City, State</th>
+								<!--<th width="180">Country, City, State</th>-->
 								<th>Status</th>
 								<th width="100">Change Status</th>
 								<th width="100">Action</th>
@@ -27,9 +27,7 @@
 							<?php
 							$i=0;
 							$statement = $pdo->prepare("SELECT * 
-														FROM tbl_customer t1
-														JOIN tbl_country t2
-														ON t1.cust_country = t2.country_id
+														FROM tbl_customer
 													");
 							$statement->execute();
 							$result = $statement->fetchAll(PDO::FETCH_ASSOC);						
@@ -38,13 +36,13 @@
 								?>
 								<tr class="<?php if($row['cust_status']==1) {echo 'bg-g';}else {echo 'bg-r';} ?>">
 									<td><?php echo $i; ?></td>
-									<td><?php echo $row['cust_name']; ?></td>
+									<!--<td><?php echo $row['cust_name']; ?></td>-->
 									<td><?php echo $row['cust_email']; ?></td>
-									<td>
+									<!--<td>
 										<?php echo $row['country_name']; ?><br>
 										<?php echo $row['cust_city']; ?><br>
 										<?php echo $row['cust_state']; ?>
-									</td>
+									</td>-->
 									<td><?php if($row['cust_status']==1) {echo 'Active';} else {echo 'Inactive';} ?></td>
 									<td>
 										<a href="customer-change-status.php?id=<?php echo $row['cust_id']; ?>" class="btn btn-success btn-xs">Change Status</a>
