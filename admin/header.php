@@ -116,6 +116,7 @@ if(!isset($_SESSION['user'])) {
                             <li><a href="size.php"><i class="fa fa-circle-o"></i> Size</a></li>
                             <li><a href="color.php"><i class="fa fa-circle-o"></i> Color</a></li>
                             <li><a href="country.php"><i class="fa fa-circle-o"></i> Country</a></li>
+							<li><a href="pgp-address.php"><i class="fa fa-circle-o"></i> PGP Address</a></li>
                             <li><a href="shipping-cost.php"><i class="fa fa-circle-o"></i> Shipping Cost</a></li>
                             <li><a href="top-category.php"><i class="fa fa-circle-o"></i> Top Level Category</a></li>
                             <li><a href="mid-category.php"><i class="fa fa-circle-o"></i> Mid Level Category</a></li>

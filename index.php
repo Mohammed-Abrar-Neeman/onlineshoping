@@ -123,11 +123,13 @@ if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
 	width: 60px;
     height: 60px;
     border-radius: 500%;
-    background: linear-gradient(to left, #ab68ca, #de67a3);;
+    background: #000000;
     
 	box-shadow: 2px 18px 70px 0px #9D9D9D;
     bottom: -30px;
     left: 370px;
+    font-size: 13px;
+    color:white;
     
     
 }

@@ -20,10 +20,13 @@ if(!isset($_SESSION['customer'])) {
 <?php
 if (isset($_POST['form1'])) {
 
-
+    if(empty($_POST['cust_s_address'])) {
+        $valid = 0;
+        $error_message .= LANG_VALUE_125."<br>";
+    } else {
     // update data into the database
     $statement = $pdo->prepare("UPDATE tbl_customer SET 
-                            cust_b_name=?, 
+                            /*cust_b_name=?, 
                             cust_b_cname=?, 
                             cust_b_phone=?, 
                             cust_b_country=?, 
@@ -34,15 +37,15 @@ if (isset($_POST['form1'])) {
                             cust_s_name=?, 
                             cust_s_cname=?, 
                             cust_s_phone=?, 
-                            cust_s_country=?, 
-                            cust_s_address=?, 
-                            cust_s_city=?, 
+                            cust_s_country=?, */
+                            cust_s_address=? 
+                            /*cust_s_city=?, 
                             cust_s_state=?, 
-                            cust_s_zip=? 
+                            cust_s_zip=? */
 
                             WHERE cust_id=?");
     $statement->execute(array(
-                            strip_tags($_POST['cust_b_name']),
+                            /*strip_tags($_POST['cust_b_name']),
                             strip_tags($_POST['cust_b_cname']),
                             strip_tags($_POST['cust_b_phone']),
                             strip_tags($_POST['cust_b_country']),
@@ -53,17 +56,17 @@ if (isset($_POST['form1'])) {
                             strip_tags($_POST['cust_s_name']),
                             strip_tags($_POST['cust_s_cname']),
                             strip_tags($_POST['cust_s_phone']),
-                            strip_tags($_POST['cust_s_country']),
+                            strip_tags($_POST['cust_s_country']),*/
                             strip_tags($_POST['cust_s_address']),
-                            strip_tags($_POST['cust_s_city']),
+                            /*strip_tags($_POST['cust_s_city']),
                             strip_tags($_POST['cust_s_state']),
-                            strip_tags($_POST['cust_s_zip']),
+                            strip_tags($_POST['cust_s_zip']),*/
                             $_SESSION['customer']['cust_id']
                         ));  
    
     $success_message = LANG_VALUE_122;
 
-    $_SESSION['customer']['cust_b_name'] = strip_tags($_POST['cust_b_name']);
+   /* $_SESSION['customer']['cust_b_name'] = strip_tags($_POST['cust_b_name']);
     $_SESSION['customer']['cust_b_cname'] = strip_tags($_POST['cust_b_cname']);
     $_SESSION['customer']['cust_b_phone'] = strip_tags($_POST['cust_b_phone']);
     $_SESSION['customer']['cust_b_country'] = strip_tags($_POST['cust_b_country']);
@@ -74,12 +77,12 @@ if (isset($_POST['form1'])) {
     $_SESSION['customer']['cust_s_name'] = strip_tags($_POST['cust_s_name']);
     $_SESSION['customer']['cust_s_cname'] = strip_tags($_POST['cust_s_cname']);
     $_SESSION['customer']['cust_s_phone'] = strip_tags($_POST['cust_s_phone']);
-    $_SESSION['customer']['cust_s_country'] = strip_tags($_POST['cust_s_country']);
+    $_SESSION['customer']['cust_s_country'] = strip_tags($_POST['cust_s_country']);*/
     $_SESSION['customer']['cust_s_address'] = strip_tags($_POST['cust_s_address']);
-    $_SESSION['customer']['cust_s_city'] = strip_tags($_POST['cust_s_city']);
+    /*$_SESSION['customer']['cust_s_city'] = strip_tags($_POST['cust_s_city']);
     $_SESSION['customer']['cust_s_state'] = strip_tags($_POST['cust_s_state']);
-    $_SESSION['customer']['cust_s_zip'] = strip_tags($_POST['cust_s_zip']);
-
+    $_SESSION['customer']['cust_s_zip'] = strip_tags($_POST['cust_s_zip']);*/
+                    }
 }
 ?>
 
@@ -104,7 +107,7 @@ if (isset($_POST['form1'])) {
                         <div class="row">
                             <div class="col-md-6">
                                 <h3><?php echo LANG_VALUE_86; ?></h3>
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_102; ?></label>
                                     <input type="text" class="form-control" name="cust_b_name" value="<?php echo $_SESSION['customer']['cust_b_name']; ?>">
                                 </div>
@@ -130,12 +133,29 @@ if (isset($_POST['form1'])) {
                                         }
                                         ?>
                                     </select>
-                                </div>
+                                </div>-->
                                 <div class="form-group">
-                                    <label for=""><?php echo LANG_VALUE_105; ?></label>
-                                    <textarea name="cust_b_address" class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $_SESSION['customer']['cust_b_address']; ?></textarea>
+                                    <!--<label for=""><?php echo LANG_VALUE_105; ?></label>-->
+                                    <!--<textarea name="cust_b_address" class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $_SESSION['customer']['cust_b_address']; ?></textarea>-->
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" >
+                                <table class="table table-responsive table-bordered bill-address">
+                                <tr>
+                                <td>
+                                <?php
+    $statement = $pdo->prepare("SELECT * FROM tbl_store_pgp WHERE store_id=1");
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+    foreach ($result as $row) {
+        echo $row['pgp'];
+    }
+    ?>
+    
+    </td>
+    </tr>
+                                </table>
+                                </div>
+                                <!--<div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_107; ?></label>
                                     <input type="text" class="form-control" name="cust_b_city" value="<?php echo $_SESSION['customer']['cust_b_city']; ?>">
                                 </div>
@@ -146,11 +166,11 @@ if (isset($_POST['form1'])) {
                                 <div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_109; ?></label>
                                     <input type="text" class="form-control" name="cust_b_zip" value="<?php echo $_SESSION['customer']['cust_b_zip']; ?>">
-                                </div>
+                                </div>-->
                             </div>
                             <div class="col-md-6">
                                 <h3><?php echo LANG_VALUE_87; ?></h3>
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_102; ?></label>
                                     <input type="text" class="form-control" name="cust_s_name" value="<?php echo $_SESSION['customer']['cust_s_name']; ?>">
                                 </div>
@@ -176,12 +196,12 @@ if (isset($_POST['form1'])) {
                                         }
                                         ?>
                                     </select>
-                                </div>
+                                </div>-->
                                 <div class="form-group">
-                                    <label for=""><?php echo LANG_VALUE_105; ?></label>
-                                    <textarea name="cust_s_address" class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $_SESSION['customer']['cust_s_address']; ?></textarea>
+                                    <!--<label for=""><?php echo LANG_VALUE_105; ?></label>-->
+                                    <textarea name="cust_s_address" class="form-control" cols="30" rows="10" style="height:100px;" placeholder="PGP Address"><?php echo $_SESSION['customer']['cust_s_address']; ?></textarea>
                                 </div>
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_107; ?></label>
                                     <input type="text" class="form-control" name="cust_s_city" value="<?php echo $_SESSION['customer']['cust_s_city']; ?>">
                                 </div>
@@ -192,7 +212,7 @@ if (isset($_POST['form1'])) {
                                 <div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_109; ?></label>
                                     <input type="text" class="form-control" name="cust_s_zip" value="<?php echo $_SESSION['customer']['cust_s_zip']; ?>">
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <input type="submit" class="btn btn-primary" value="<?php echo LANG_VALUE_5; ?>" name="form1">

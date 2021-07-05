@@ -178,7 +178,7 @@ if(!isset($_SESSION['cart_p_id'])) {
                         <div class="col-md-6">
                             <h3 class="special"><?php echo LANG_VALUE_161; ?></h3>
                             <table class="table table-responsive table-bordered bill-address">
-                                <tr>
+                                <!--<tr>
                                     <td><?php echo LANG_VALUE_102; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_b_name']; ?></p></td>
                                 </tr>
@@ -189,21 +189,21 @@ if(!isset($_SESSION['cart_p_id'])) {
                                 <tr>
                                     <td><?php echo LANG_VALUE_104; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_b_phone']; ?></td>
-                                </tr>
+                                </tr>-->
                                 <tr>
-                                    <td><?php echo LANG_VALUE_106; ?></td>
+                                    
                                     <td>
-                                        <?php
-                                        $statement = $pdo->prepare("SELECT * FROM tbl_country WHERE country_id=?");
-                                        $statement->execute(array($_SESSION['customer']['cust_b_country']));
-                                        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                        foreach ($result as $row) {
-                                            echo $row['country_name'];
-                                        }
-                                        ?>
+                                    <?php
+    $statement = $pdo->prepare("SELECT * FROM tbl_store_pgp WHERE store_id=1");
+    $statement->execute();
+    $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+    foreach ($result as $row) {
+        echo $row['pgp'];
+    }
+    ?>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!--<tr>
                                     <td><?php echo LANG_VALUE_105; ?></td>
                                     <td>
                                         <?php echo nl2br($_SESSION['customer']['cust_b_address']); ?>
@@ -220,13 +220,13 @@ if(!isset($_SESSION['cart_p_id'])) {
                                 <tr>
                                     <td><?php echo LANG_VALUE_109; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_b_zip']; ?></td>
-                                </tr>                                
+                                </tr>    -->                            
                             </table>
                         </div>
                         <div class="col-md-6">
                             <h3 class="special"><?php echo LANG_VALUE_162; ?></h3>
                             <table class="table table-responsive table-bordered bill-address">
-                                <tr>
+                                <!--<tr>
                                     <td><?php echo LANG_VALUE_102; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_s_name']; ?></p></td>
                                 </tr>
@@ -250,14 +250,14 @@ if(!isset($_SESSION['cart_p_id'])) {
                                         }
                                         ?>
                                     </td>
-                                </tr>
+                                </tr>-->
                                 <tr>
                                     <td><?php echo LANG_VALUE_105; ?></td>
                                     <td>
                                         <?php echo nl2br($_SESSION['customer']['cust_s_address']); ?>
                                     </td>
                                 </tr>
-                                <tr>
+                                <!--<tr>
                                     <td><?php echo LANG_VALUE_107; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_s_city']; ?></td>
                                 </tr>
@@ -268,7 +268,7 @@ if(!isset($_SESSION['cart_p_id'])) {
                                 <tr>
                                     <td><?php echo LANG_VALUE_109; ?></td>
                                     <td><?php echo $_SESSION['customer']['cust_s_zip']; ?></td>
-                                </tr> 
+                                </tr> -->
                             </table>
                         </div>
                     </div>                    
@@ -289,7 +289,7 @@ if(!isset($_SESSION['cart_p_id'])) {
                     	<?php
 		                $checkout_access = 1;
 		                if(
-		                    ($_SESSION['customer']['cust_b_name']=='') ||
+		                    /*($_SESSION['customer']['cust_b_name']=='') ||
 		                    ($_SESSION['customer']['cust_b_cname']=='') ||
 		                    ($_SESSION['customer']['cust_b_phone']=='') ||
 		                    ($_SESSION['customer']['cust_b_country']=='') ||
@@ -300,11 +300,11 @@ if(!isset($_SESSION['cart_p_id'])) {
 		                    ($_SESSION['customer']['cust_s_name']=='') ||
 		                    ($_SESSION['customer']['cust_s_cname']=='') ||
 		                    ($_SESSION['customer']['cust_s_phone']=='') ||
-		                    ($_SESSION['customer']['cust_s_country']=='') ||
-		                    ($_SESSION['customer']['cust_s_address']=='') ||
-		                    ($_SESSION['customer']['cust_s_city']=='') ||
+		                    ($_SESSION['customer']['cust_s_country']=='') ||*/
+		                    ($_SESSION['customer']['cust_s_address']=='') 
+		                    /*($_SESSION['customer']['cust_s_city']=='') ||
 		                    ($_SESSION['customer']['cust_s_state']=='') ||
-		                    ($_SESSION['customer']['cust_s_zip']=='')
+		                    ($_SESSION['customer']['cust_s_zip']=='')*/
 		                ) {
 		                    $checkout_access = 0;
 		                }
@@ -312,7 +312,7 @@ if(!isset($_SESSION['cart_p_id'])) {
 		                <?php if($checkout_access == 0): ?>
 		                	<div class="col-md-12">
 				                <div style="color:red;font-size:22px;margin-bottom:50px;">
-			                        You must have to fill up all the billing and shipping information from your dashboard panel in order to checkout the order. Please fill up the information going to <a href="customer-billing-shipping-update.php" style="color:red;text-decoration:underline;">this link</a>.
+			                        You must have to fill shipping information from your dashboard panel in order to checkout the order. Please fill up the information going to <a href="customer-billing-shipping-update.php" style="color:red;text-decoration:underline;">this link</a>.
 			                    </div>
 	                    	</div>
 	                	<?php else: ?>
