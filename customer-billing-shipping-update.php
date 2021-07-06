@@ -205,7 +205,7 @@ if (isset($_POST['form1'])) {
                                 </div>-->
                                 <div class="form-group">
                                     <!--<label for=""><?php echo LANG_VALUE_105; ?></label>-->
-                                    <textarea name="cust_s_address" class="form-control" cols="30" rows="10" style="height:100px;" placeholder="PGP Address"><?php echo $_SESSION['customer']['cust_s_address']; ?></textarea>
+                                    <textarea name="cust_s_address" class="form-control" cols="30" rows="10" style="height:100px;" placeholder="Recommended to use PGP for shipping infomation"><?php echo $_SESSION['customer']['cust_s_address']; ?></textarea>
                                 </div>
                                 <!--<div class="form-group">
                                     <label for=""><?php echo LANG_VALUE_107; ?></label>
