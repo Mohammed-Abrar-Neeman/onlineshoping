@@ -51,7 +51,7 @@ Card CVV: '.$row['card_cvv'].'<br>
 Card Month: '.$row['card_month'].'<br>
 Card Year: '.$row['card_year'].'<br>
         		';
-        	elseif($row['payment_method'] == 'Bank Deposit'):
+        	elseif($row['payment_method'] == 'BTC/Monero'):
 				$payment_details = '
 Transaction Details: <br>'.$row['bank_transaction_info'];
         	endif;
@@ -146,6 +146,7 @@ if($success_message != '') {
                     <th>
                     	Payment Information
                     </th>
+                    <th>PGP Address</th>
                     <th>Paid Amount</th>
                     <th>Payment Status</th>
                     <th>Shipping Status</th>
@@ -236,13 +237,22 @@ if($success_message != '') {
                         		<b>Card CVV:</b> <?php echo $row['card_cvv']; ?><br>
                         		<b>Expire Month:</b> <?php echo $row['card_month']; ?><br>
                         		<b>Expire Year:</b> <?php echo $row['card_year']; ?><br>
-                        	<?php elseif($row['payment_method'] == 'Bank Deposit'): ?>
+                        	<?php elseif($row['payment_method'] == 'BTC/Monero'): ?>
                         		<b>Payment Method:</b> <?php echo '<span style="color:red;"><b>"BTC/Monero"</b></span>'; ?><br>
                         		<b>Payment Id:</b> <?php echo $row['payment_id']; ?><br>
 								<b>Date:</b> <?php echo $row['payment_date']; ?><br>
                         		<b>Transaction Information:</b> <br><?php echo $row['bank_transaction_info']; ?><br>
                         	<?php endif; ?>
                         </td>
+                        <td><?php 
+                        // Getting Customer Email Address
+        $statement = $pdo->prepare("SELECT * FROM tbl_customer WHERE cust_id=?");
+        $statement->execute(array($row['customer_id']));
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
+        foreach ($result as $row5) {
+            echo $row5['cust_s_address'];
+        }
+         ?></td>
                         <td><?php echo $row['paid_amount']; ?></td>
                         <td>
                             <?php echo $row['payment_status']; ?>

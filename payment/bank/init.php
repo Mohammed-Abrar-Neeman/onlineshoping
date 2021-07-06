@@ -50,7 +50,7 @@ if( !isset($_REQUEST['msg']) ) {
 	                            '', 
 	                            '',
 	                            $_POST['transaction_info'],
-	                            'Bank Deposit',
+	                            'BTC/Monero',
 	                            'Pending',
 	                            'Pending',
 	                            $payment_id
