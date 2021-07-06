@@ -16,7 +16,7 @@ foreach ($result as $row) {
 <?php
 if( !isset($_REQUEST['msg']) ) {
 	if(empty($_POST['transaction_info'])) {
-		header('location: ../../checkout.php');
+		header('location: ../../index.php');
 	} else {
 		$payment_date = date('Y-m-d H:i:s');
 	    $payment_id = time();
