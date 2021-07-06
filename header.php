@@ -1,3 +1,9 @@
+<?php
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:index.php');
+    exit;
+}?>
 <!-- This is main configuration File -->
 <?php
 ob_start();

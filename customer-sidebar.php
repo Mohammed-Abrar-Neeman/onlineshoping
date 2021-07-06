@@ -1,3 +1,9 @@
+<?php
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:index.php');
+    exit;
+}?>
 <div class="user-sidebar">
     <ul>
         <li><a href="dashboard.php"><?php echo LANG_VALUE_89; ?></a></li>

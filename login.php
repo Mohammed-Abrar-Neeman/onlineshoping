@@ -1,3 +1,9 @@
+<?php
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:index.php');
+    exit;
+}?>
 <?php require_once('header-login.php'); ?>
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");

@@ -1,4 +1,9 @@
-
+<?php
+if(!isset($_SERVER['HTTP_REFERER'])){
+    // redirect them to your desired location
+    header('location:index.php');
+    exit;
+}?>
 <h3><?php echo LANG_VALUE_49; ?></h3>
     <div id="left" class="span3">
 
