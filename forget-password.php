@@ -4,7 +4,7 @@ if(!isset($_SERVER['HTTP_REFERER'])){
     header('location:index.php');
     exit;
 }?>
-<?php require_once('header.php'); ?>
+<?php require_once('header-login.php'); ?>
 
 <?php
 $statement = $pdo->prepare("SELECT * FROM tbl_settings WHERE id=1");
