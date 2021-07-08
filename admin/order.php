@@ -1,5 +1,16 @@
-<?php require_once('header.php'); ?>
+<!--<style>
+    table tbody {
+  display: block;
+  max-height: 300px;
+  overflow-y: scroll;
+}
 
+table thead, table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}</style>-->
+<?php require_once('header.php'); ?>
 <?php
 $error_message = '';
 if(isset($_POST['form1'])) {
@@ -244,15 +255,19 @@ if($success_message != '') {
                         		<b>Transaction Information:</b> <br><?php echo $row['bank_transaction_info']; ?><br>
                         	<?php endif; ?>
                         </td>
-                        <td><?php 
+                        <td><!--<div style="width:100%; max-height:300px; overflow:auto">-->
+                        <?php 
                         // Getting Customer Email Address
         $statement = $pdo->prepare("SELECT * FROM tbl_customer WHERE cust_id=?");
         $statement->execute(array($row['customer_id']));
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
         foreach ($result as $row5) {
-            echo $row5['cust_s_address'];
+            //echo $row5['cust_s_address'];
         }
-         ?></td>
+         ?>
+         <textarea readonly class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $row5['cust_s_address'] ?></textarea>
+         <!--</div>-->
+        </td>
                         <td><?php echo $row['paid_amount']; ?></td>
                         <td>
                             <?php echo $row['payment_status']; ?>

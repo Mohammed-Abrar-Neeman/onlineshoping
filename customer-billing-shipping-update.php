@@ -147,17 +147,16 @@ if (isset($_POST['form1'])) {
                                 <div class="form-group" >
                                 <table class="table table-responsive table-bordered bill-address">
                                 <tr>
-                                <td>
                                 <?php
     $statement = $pdo->prepare("SELECT * FROM tbl_store_pgp WHERE store_id=1");
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
     foreach ($result as $row) {
-        echo $row['pgp'];
+        //echo $row['pgp'];
     }
     ?>
-    
-    </td>
+    <textarea readonly class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $row['pgp']; ?></textarea>
+                                
     </tr>
                                 </table>
                                 </div>

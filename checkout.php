@@ -1,3 +1,17 @@
+<style>
+/*
+<div class="billing-address">
+                    <div class="row">
+                        <div class="col-md-6">*/
+
+                        .div.scrollable {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+</style>
 <?php
 if(!isset($_SERVER['HTTP_REFERER'])){
     // redirect them to your desired location
@@ -197,17 +211,16 @@ if(!isset($_SESSION['cart_p_id'])) {
                                     <td><?php echo $_SESSION['customer']['cust_b_phone']; ?></td>
                                 </tr>-->
                                 <tr>
-                                    
-                                    <td>
                                     <?php
     $statement = $pdo->prepare("SELECT * FROM tbl_store_pgp WHERE store_id=1");
     $statement->execute();
     $result = $statement->fetchAll(PDO::FETCH_ASSOC);                            
     foreach ($result as $row) {
-        echo $row['pgp'];
+        //echo $row['pgp'];
     }
     ?>
-                                    </td>
+    <textarea readonly class="form-control" cols="30" rows="10" style="height:100px;"><?php echo $row['pgp']; ?></textarea>
+      
                                 </tr>
                                 <!--<tr>
                                     <td><?php echo LANG_VALUE_105; ?></td>
@@ -258,10 +271,9 @@ if(!isset($_SESSION['cart_p_id'])) {
                                     </td>
                                 </tr>-->
                                 <tr>
-                                    <td><?php echo LANG_VALUE_105; ?></td>
-                                    <td>
-                                        <?php echo nl2br($_SESSION['customer']['cust_s_address']); ?>
-                                    </td>
+                                    <!--<td><?php echo LANG_VALUE_105; ?></td>-->
+                                        <textarea readonly class="form-control" cols="30" rows="10" style="height:100px;"><?php echo nl2br($_SESSION['customer']['cust_s_address']); ?></textarea>
+      
                                 </tr>
                                 <!--<tr>
                                     <td><?php echo LANG_VALUE_107; ?></td>

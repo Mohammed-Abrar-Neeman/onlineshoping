@@ -39,11 +39,12 @@ if(!isset($_SESSION['customer'])) {
                                     <th><?php echo LANG_VALUE_7; ?></th>
                                     <th><?php echo LANG_VALUE_48; ?></th>
                                     <th><?php echo LANG_VALUE_27; ?></th>
-                                    <th><?php echo LANG_VALUE_28; ?></th>
                                     <th><?php echo LANG_VALUE_29; ?></th>
                                     <th><?php echo LANG_VALUE_30; ?></th>
                                     <th><?php echo LANG_VALUE_31; ?></th>
                                     <th><?php echo LANG_VALUE_32; ?></th>
+                                    <th><?php echo "Transaction Info" ?></th>
+                                    <th><?php echo "Shipping status" ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -172,11 +173,12 @@ if(!isset($_SESSION['customer'])) {
                                             ?>
                                         </td>
                                         <td><?php echo $row['payment_date']; ?></td>
-                                        <td><?php echo $row['txnid']; ?></td>
                                         <td><?php echo $row['paid_amount']; ?></td>
                                         <td><?php echo $row['payment_status']; ?></td>
                                         <td><?php echo $row['payment_method']; ?></td>
                                         <td><?php echo $row['payment_id']; ?></td>
+                                        <td><?php echo $row['bank_transaction_info']; ?></td>
+                                        <td><?php echo $row['shipping_status']; ?></td>
                                     </tr>
                                     <?php
                                 }
